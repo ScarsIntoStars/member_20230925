@@ -12,10 +12,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Long save(MemberDTO memberDTO){
-        System.out.println("Entity 되기 직전" + memberDTO);
         MemberEntity memberEntity = MemberEntity.toSaveEntity(memberDTO);
         Long saveId = memberRepository.save(memberEntity).getId();
-        System.out.println("saveId : " +  saveId);
         return saveId;
     }
 }

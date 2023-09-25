@@ -7,8 +7,7 @@ import lombok.Setter;
 
 import java.lang.reflect.Member;
 
-@Getter
-@Setter
+
 @Data
 public class MemberDTO {
     private Long id;
@@ -19,7 +18,7 @@ public class MemberDTO {
     private String memberMobile;
 
     // Entity -> DTO
-    private static MemberDTO toDTO(MemberEntity memberEntity){
+    public static MemberDTO toSaveDTO(MemberEntity memberEntity){
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberEntity.getId());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());

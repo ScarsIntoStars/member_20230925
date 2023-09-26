@@ -78,8 +78,19 @@
     }
 
     const member_delete = (id) => {
-        location.href = `/member/delete/${id}`;
+        // location.href = `/member/delete/${id}`;
+        axios({
+            method: "delete",
+            url: `/member/{id}`
+        }).then(res => {
+            alert("삭제성공");
+            location.href="/member";
+        }).catch(err => {
+            alert("삭제실패");
+        });
     }
+
+
 
     // const detail_now = (id) => {
     //

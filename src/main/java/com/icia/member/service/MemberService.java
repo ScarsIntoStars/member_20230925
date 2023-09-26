@@ -100,4 +100,8 @@ public class MemberService {
         memberRepository.save(memberEntity);
 
     }
+
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
+    }
 }

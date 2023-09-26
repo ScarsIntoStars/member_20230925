@@ -16,7 +16,7 @@
       이름 : <input type="text" name="memberName" th:value="${member.memberName}"> <br>
       생년월일 : <input type="date" name="memberBirth" th:value="${member.memberBirth}"> <br>
       전화번호 : <input type="text" name="memberMobile" th:value="${member.memberMobile}">
-      <input type="button" value="수정" onClick="member_update()">
+      <input type="button" value="수정" onclick="member_update()">
     </form>
   </div>
 </div>
@@ -28,11 +28,37 @@
   const member_update = () => {
     const passDB = [[${member.memberPassword}]]
     const passInput = document.querySelector('[name="memberPassword"]').value;
-    if(passDB== passInput) {
-      document.updateForm.submit();
+    const id = document.querySelector('[name="id"]').value;
+    const name = document.querySelector('[name="memberName"]').value;
+    const birth = document.querySelector('[name="memberBirth"]').value;
+    const mobile = document.querySelector('[name="memberMobile"]').value;
+    const email = document.querySelector('[name="memberEmail"]').value;
+    if(passDB == passInput){
+      axios({
+        method: "put",
+        url:`/member/${id}`,
+        data: {
+          id: id,
+          memberEmail: email,
+          memberPassword: passInput,
+          memberName: name,
+          memberBirth: birth,
+          memberMobile: mobile
+        }
+      }).then( res => {
+        alert("정보수정이 완료되었습니다. 로그인 화면으로 이동합니다.")
+        location.href="/member/login"
+      }).catch( err => {
+        alert("실패입니다.");
+      });
     } else {
-      alert("비밀번호가 일치하지 않습니다");
+      alert("비밀번호가 일치하지 않습니다.")
     }
+    // if(passDB== passInput) {
+    //   document.updateForm.submit();
+    // } else {
+    //   alert("비밀번호가 일치하지 않습니다");
+    // }
   }
 </script>
 </html>

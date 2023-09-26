@@ -19,26 +19,28 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+
     @GetMapping("/save")
-    public String save(){
+    public String save() {
         return "memberPage/memberSave";
     }
+
     @PostMapping("/save")
-    public String save(MemberDTO memberDTO){
+    public String save(MemberDTO memberDTO) {
         System.out.println(memberDTO);
         memberService.save(memberDTO);
         return "index";
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "/memberPage/memberLogin";
     }
 
     @PostMapping("/login")
     public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
         boolean loginResult = memberService.login(memberDTO);
-        if(loginResult) {
+        if (loginResult) {
             session.setAttribute("loginEmail", memberDTO.getMemberEmail());
             return "/memberPage/memberMain";
         } else {
@@ -47,33 +49,43 @@ public class MemberController {
     }
 
     @GetMapping("/list")
-    public String findAll(Model model){
+    public String findAll(Model model) {
         List<MemberDTO> memberDTOList = memberService.findAll();
         model.addAttribute("memberList", memberDTOList);
         return "/memberPage/memberList";
     }
 
     @GetMapping("/memberDetail/{id}")
-    public String detail(@PathVariable("id") Long id, Model model){
-        System.out.println("넘어온 id는 : " +id);
+    public String detail(@PathVariable("id") Long id, Model model) {
+        System.out.println("넘어온 id는 : " + id);
         try {
             MemberDTO memberDTO = memberService.findById(id);
             model.addAttribute("member", memberDTO);
             return "/memberPage/memberDetail";
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return "/memberPage/NotFound";
-        } catch (Exception e){
+        } catch (Exception e) {
             return "/memberPage/NotFound";
         }
     }
 
     @PostMapping("/dup-check")
-    public ResponseEntity emailCheck(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity emailCheck(@RequestBody MemberDTO memberDTO) {
         boolean result = memberService.emailCheck(memberDTO.getMemberEmail());
-        if(result){
+        if (result) {
             return new ResponseEntity<>("사용가능", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("사용불가능", HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/axios/{id}")
+    public ResponseEntity detailAxios(@PathVariable("id") Long id) {
+        try {
+            MemberDTO memberDTO = memberService.findById(id);
+            return new ResponseEntity<>(memberDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 }

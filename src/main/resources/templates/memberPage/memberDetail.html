@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<div th:replace="~{component/header :: header}"></div>
+<div th:replace="~{component/nav :: nav}"></div>
+
+<div class="container">
+    <h3>디테일페이지입니다.</h3>
+    <div class="container">
+        <table class="table">
+            <tr>
+                <td>memberEmail</td>
+                <td>memberPassword</td>
+                <td>memberName</td>
+                <td>memberBirth</td>
+                <td>memberMobile</td>
+            </tr>
+            <tr>
+                <td th:text="${member.memberEmail}"></td>
+                <td th:text="${member.memberPassword}"></td>
+                <td th:text="${member.memberName}"></td>
+                <td th:text="${member.memberBirth}"></td>
+                <td th:text="${member.memberMobile}"></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<div th:replace="~{component/footer :: footer}"></div>
+
+</body>
+</html>

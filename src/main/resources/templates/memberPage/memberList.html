@@ -10,22 +10,35 @@
 <div class="container">
     <div class="card">
         <div class="table">
-            <tr>
-                <td>id</td>
-                <td>email</td>
-                <td>password</td>
-                <td>name</td>
-                <td>birth</td>
-                <td>mobile</td>
-            </tr>
-            <tr th:each="member: ${memberList}">
-                <td th:text="${member.id}"></td>
-                <td th:text="${member.memberEmail}"></td>
-                <td th:text="${member.memberPassword}"></td>
-                <td th:text="${member.memberName}"></td>
-                <td th:text="${member.memberBirth}"></td>
-                <td th:text="${member.memberMobile}"></td>
-            </tr>
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>email</th>
+                    <th>password</th>
+                    <th>name</th>
+                    <th>birth</th>
+                    <th>mobile</th>
+                </tr>
+                <tr th:each="member: ${memberList}">
+                    <td th:text="${member.id}"></td>
+                    <td>
+                        <a th:href="@{|/member/${member.id}|}" th:text="${member.memberEmail}"></a>
+                    </td>
+                    <td>
+                        <a th:href="@{/member/${member.id}}" th:text="${member.memberEmail}"></a>
+                    </td>
+                    <td th:text="${member.memberPassword}"></td>
+                    <td th:text="${member.memberName}"></td>
+                    <td th:text="${member.memberBirth}"></td>
+                    <td th:text="${member.memberMobile}"></td>
+                    <td>
+                        <button th:onclick="member_detail([[${member.id}]])">조회</button>
+                    </td>
+                    <td>
+                        <button th:onclick="member_delete([[${member.id}]])">삭제</button>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
@@ -33,4 +46,14 @@
 <div th:replace="~{component/footer :: footer}"></div>
 
 </body>
+<script th:inline="javascript">
+    const member_detail = (id) => {
+        location.href = `/member/memberDetail/${id}`;
+    }
+
+    const member_delete = (id) => {
+        location.href = `/member/delete/${id}`;
+    }
+
+</script>
 </html>

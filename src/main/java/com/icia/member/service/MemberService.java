@@ -57,7 +57,35 @@ public class MemberService {
         for(MemberEntity memberEntity : memberEntityList) {
             MemberDTO memberDTO = MemberDTO.toSaveDTO(memberEntity);
             memberDTOList.add(memberDTO);
+
+            // 한줄로
+//            memberDTOList.add(MemberDTO.toSaveDTO(memberEntity));
         }
         return memberDTOList;
+    }
+
+    public MemberDTO findById(Long id) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+        if(optionalMemberEntity.isPresent()) {
+            // 있는 경우
+            MemberEntity memberEntity = optionalMemberEntity.get();
+            return MemberDTO.toSaveDTO(memberEntity);
+        } else {
+            // 없는 경우
+            return null;
+        }
+
+        // 한 줄로 가능
+        // MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new NosuchElemetException());
+        // return Member.toSaveDTO(memberEntity);
+    }
+
+    public Boolean emailCheck(String memberEmail){
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+        if(optionalMemberEntity.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

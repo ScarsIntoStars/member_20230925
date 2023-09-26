@@ -10,7 +10,8 @@
 <div class="container">
     <div class="card m-5 p-5">
         <form action="/member/save" method="post">
-            계정 : <input type="text" name="memberEmail"> <br>
+            계정 : <input type="text" name="memberEmail" onblur="email_check()"> <br>
+<!--            // 매개변수가 없어서 온블러만 사용. 매개변수가 있으면 th온블러 사용-->
             비밀번호 : <input type="text" name="memberPassword"> <br>
             이름 : <input type="text" name="memberName"> <br>
             생년월일 : <input type="date" name="memberBirth"> <br>
@@ -20,6 +21,26 @@
     </div>
 </div>
 
-
 </body>
+<script th:inline="javascript">
+    const onblur = () => {
+        const email = document.querySelector(`[name="memberEmail"]`).value();
+        axios({
+           method: "post", // http request method(get, post, put, delete...)
+            url: "/member/dup-check",
+            data: {
+               memberEmail: memberEmail
+            }
+        }).then(res => {
+            // 요청성공 후 서버에서 200 응답
+            console.log("res", res);
+        }).catch(err => {
+            // 용청실패 또는서버에서 4xx, 5xx 응답
+            console.log("err", err);
+        });
+    }
+
+
+</script>
+
 </html>

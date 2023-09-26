@@ -4,15 +4,15 @@ import com.icia.member.dto.MemberDTO;
 import com.icia.member.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/member")
@@ -51,5 +51,29 @@ public class MemberController {
         List<MemberDTO> memberDTOList = memberService.findAll();
         model.addAttribute("memberList", memberDTOList);
         return "/memberPage/memberList";
+    }
+
+    @GetMapping("/memberDetail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model){
+        System.out.println("넘어온 id는 : " +id);
+        try {
+            MemberDTO memberDTO = memberService.findById(id);
+            model.addAttribute("member", memberDTO);
+            return "/memberPage/memberDetail";
+        } catch (NoSuchElementException e){
+            return "/memberPage/NotFound";
+        } catch (Exception e){
+            return "/memberPage/NotFound";
+        }
+    }
+
+    @PostMapping("/dup-check")
+    public ResponseEntity emailCheck(@RequestBody MemberDTO memberDTO){
+        boolean result = memberService.emailCheck(memberDTO.getMemberEmail());
+        if(result){
+            return new ResponseEntity<>("사용가능", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("사용불가능", HttpStatus.CONFLICT);
+        }
     }
 }

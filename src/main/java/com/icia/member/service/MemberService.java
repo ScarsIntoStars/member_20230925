@@ -17,7 +17,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public Long save(MemberDTO memberDTO){
+    public Long save(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.toSaveEntity(memberDTO);
         Long saveId = memberRepository.save(memberEntity).getId();
         return saveId;
@@ -43,7 +43,7 @@ public class MemberService {
 
         // 2번 방법
         Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmailAndMemberPassword(memberDTO.getMemberEmail(), memberDTO.getMemberPassword());
-        if (optionalMemberEntity.isPresent()){
+        if (optionalMemberEntity.isPresent()) {
 
             return true;
         } else {
@@ -54,7 +54,7 @@ public class MemberService {
     public List<MemberDTO> findAll() {
         List<MemberEntity> memberEntityList = memberRepository.findAll();
         List<MemberDTO> memberDTOList = new ArrayList<>();
-        for(MemberEntity memberEntity : memberEntityList) {
+        for (MemberEntity memberEntity : memberEntityList) {
             MemberDTO memberDTO = MemberDTO.toSaveDTO(memberEntity);
             memberDTOList.add(memberDTO);
 
@@ -66,7 +66,7 @@ public class MemberService {
 
     public MemberDTO findById(Long id) {
         Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
-        if(optionalMemberEntity.isPresent()) {
+        if (optionalMemberEntity.isPresent()) {
             // 있는 경우
             MemberEntity memberEntity = optionalMemberEntity.get();
             return MemberDTO.toSaveDTO(memberEntity);
@@ -80,12 +80,24 @@ public class MemberService {
         // return Member.toSaveDTO(memberEntity);
     }
 
-    public Boolean emailCheck(String memberEmail){
+    public Boolean emailCheck(String memberEmail) {
         Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
-        if(optionalMemberEntity.isEmpty()) {
+        if (optionalMemberEntity.isEmpty()) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public MemberDTO findByMemberEmail(String memberEmail) {
+        MemberDTO memberDTO = new MemberDTO();
+        MemberEntity memberEntity = memberRepository.findByMemberEmail(memberEmail).orElseThrow(() -> new NoSuchElementException());
+        return memberDTO.toSaveDTO(memberEntity);
+    }
+
+    public void update(MemberDTO memberDTO) {
+        MemberEntity memberEntity = MemberEntity.toUpdateEntity(memberDTO);
+        memberRepository.save(memberEntity);
+
     }
 }

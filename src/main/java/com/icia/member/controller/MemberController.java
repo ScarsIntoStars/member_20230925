@@ -88,4 +88,20 @@ public class MemberController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/update")
+    public String update(Model model, HttpSession session){
+        String memberEmail =(String) session.getAttribute("loginEmail");
+        MemberDTO memberDTO = memberService.findByMemberEmail(memberEmail);
+        model.addAttribute("member", memberDTO);
+        return "/memberPage/memberUpdate";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
+        // 업데이트가 끝나면 로그아웃 처리를 하고, 로그인 페이지로
+        memberService.update(memberDTO);
+        session.removeAttribute("loginEmail");
+        return "memberPage/memberLogin";
+    }
 }

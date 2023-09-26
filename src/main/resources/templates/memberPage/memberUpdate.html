@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<div th:replace="~{component/header :: header}"></div>
+<div th:replace="~{component/nav :: nav}"></div>
+
+<div class="container">
+  <div class="card m-5 p-5">
+    <form action="/member/update" method="post" name="updateForm">
+      아이디 : <input type="hidden" name="id" th:value="${member.id}">
+      이메일 : <input type="text" name="memberEmail" th:value="${member.memberEmail}"> <br>
+      비밀번호 : <input type="text" name="memberPassword" th:value="${member.memberPassword}"> <br>
+      이름 : <input type="text" name="memberName" th:value="${member.memberName}"> <br>
+      생년월일 : <input type="date" name="memberBirth" th:value="${member.memberBirth}"> <br>
+      전화번호 : <input type="text" name="memberMobile" th:value="${member.memberMobile}">
+      <input type="button" value="수정" onClick="member_update()">
+    </form>
+  </div>
+</div>
+
+<div th:replace="~{component/footer :: footer}"></div>
+
+</body>
+<script th:inline="javascript">
+  const member_update = () => {
+    const passDB = [[${member.memberPassword}]]
+    const passInput = document.querySelector('[name="memberPassword"]').value;
+    if(passDB== passInput) {
+      document.updateForm.submit();
+    } else {
+      alert("비밀번호가 일치하지 않습니다");
+    }
+  }
+</script>
+</html>
